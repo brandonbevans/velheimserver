@@ -32,8 +32,9 @@ ENV PORT=2456 \
     SERVER_PUBLIC=1
 
 # Expose necessary ports
-EXPOSE ${PORT}/udp
-EXPOSE $((PORT+1))/udp
+EXPOSE 2456/udp
+EXPOSE 2457/udp
+
 
 # Start script
 CMD ["/home/steam/valheim/start_server.sh"]
