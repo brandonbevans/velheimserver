@@ -11,6 +11,13 @@ RUN apt-get update && apt-get install -y \
 
 # Create steam user and directory
 RUN useradd -m steam
+
+# Copy server start script first (while still root)
+COPY start_server.sh /home/steam/valheim/
+RUN chown steam:steam /home/steam/valheim/start_server.sh && \
+    chmod +x /home/steam/valheim/start_server.sh
+
+# Switch to steam user
 WORKDIR /home/steam
 USER steam
 
@@ -20,21 +27,16 @@ RUN steamcmd +login anonymous \
     +app_update 896660 validate \
     +quit
 
-# Copy server start script
-COPY start_server.sh /home/steam/valheim/
-RUN chmod +x /home/steam/valheim/start_server.sh
-
 # Default environment variables
 ENV PORT=2456 \
-    SERVER_NAME="Valheim Server" \
-    WORLD_NAME="fortheboyz" \
-    SERVER_PASS="tybg" \
+    SERVER_NAME="Railway Valheim Server" \
+    WORLD_NAME="Railway" \
+    SERVER_PASS="changeme" \
     SERVER_PUBLIC=1
 
-# Expose necessary ports
+# Expose necessary ports (2456 and 2457 for Valheim)
 EXPOSE 2456/udp
 EXPOSE 2457/udp
 
-
 # Start script
-CMD ["/home/steam/valheim/start_server.sh"]
+CMD ["/home/steam/valheim/start_server.sh"] 
